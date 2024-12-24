@@ -8,6 +8,65 @@ package Tie::Hash::DataSection {
 
     # ABSTRACT: Access __DATA__ section via tied hash
 
+=head1 SYNOPSIS
+
+ use Tie::Hash::DataSection;
+ 
+ tie my %ds, 'Tie::Hash::DataSection';
+ 
+ # "Hello World\n"
+ print $ds{foo};
+ 
+ __DATA__
+ @@ foo
+ Hello World
+
+=head1 DESCRIPTION
+
+This is a simple tie class that allows you to access data section
+content via a Perl hash interface.
+
+=head1 CONSTRUCTOR
+
+ tie %hash, 'Tie::Hash::DataSection';
+ tie %hash, 'Tie::Hash::DataSection', $package;
+ tie %hash, 'Tie::Hash::DataSection', $package, @plugins;
+
+The optional C<$package> argument can be used to change which 
+package's C<__DATA__> section will be read from.
+
+The optional C<@plugins> array contains a list of L<Data::Section::Pluggable>
+plugins.  These can either be a:
+
+=over 4
+
+=item string
+
+ tie %hash, 'Tie::Hash::DataSection', __PACKAGE__, $plugin;
+
+the name of the plugin, for example C<trim> or C<json>.
+
+=item array reference
+
+ tie %hash, 'Tie::Hash::DataSection', __PACKAGE__, [$plugin, @args];
+
+The first element of the array is a plugin name, subsequent values
+will be passed in as arguments to the plugin.
+
+=back
+
+=head1 SEE ALSO
+
+=over 4
+
+=item L<Data::Section::Pluggable>
+
+=item L<Data::Section::Writer>
+
+=back
+
+=cut
+
     use Data::Section::Pluggable 0.08;
     use Ref::Util qw( is_plain_arrayref );
 
